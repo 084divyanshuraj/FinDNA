@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
+import numpy as np
 
 from goal_planner import goal_planner
 
 app = Flask(__name__)
-CORS(app)  # 🔥 allow frontend connection
+CORS(app)
 
 # ==============================
 # Load Model
@@ -23,9 +24,9 @@ except Exception as e:
 # ==============================
 def get_behavior_label(pred):
     return {
-        0: "Saver",
-        1: "Balanced",
-        2: "Overspender"
+        0: "Saver 💰",
+        1: "Balanced 👍",
+        2: "Overspender ⚠️"
     }.get(pred, "Unknown")
 
 
@@ -47,11 +48,11 @@ def get_expense_tip(data):
     rent_ratio = data.get("rent", 0) / income
 
     if food_ratio > 0.3:
-        return "You are spending too much on food"
+        return "You are spending too much on food 🍔"
     elif rent_ratio > 0.4:
-        return "Your rent is too high compared to income"
+        return "Your rent is too high compared to income 🏠"
     else:
-        return "Your spending looks balanced"
+        return "Your spending looks balanced 👍"
 
 
 # ==============================
@@ -63,9 +64,45 @@ def home():
     return "FinDNA Backend Running 🚀"
 
 
+# 🔥 SIMPLE PREDICT (for testing / frontend basic use)
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        if model is None:
+            return jsonify({"error": "Model not loaded"}), 500
+
+        data = request.get_json()
+
+        income = float(data.get("income", 0))
+        rent = float(data.get("rent", 0))
+        food = float(data.get("food", 0))
+        travel = float(data.get("travel", 0))
+
+        if income <= 0:
+            return jsonify({"error": "Income must be greater than 0"}), 400
+
+        features = np.array([[income, rent, food, travel]])
+
+        pred = model.predict(features)[0]
+
+        return jsonify({
+            "prediction": int(pred),
+            "behavior": get_behavior_label(pred),
+            "score": get_score(pred)
+        })
+
+    except Exception as e:
+        print("❌ Predict Error:", str(e))
+        return jsonify({"error": "Prediction failed"}), 500
+
+
+# 🔥 FULL ANALYSIS (main feature)
 @app.route("/full_analysis", methods=["POST"])
 def full_analysis():
     try:
+        if model is None:
+            return jsonify({"error": "Model not loaded"}), 500
+
         data = request.get_json()
 
         # ======================
@@ -77,10 +114,10 @@ def full_analysis():
             if field not in data:
                 return jsonify({"error": f"{field} is required"}), 400
 
-        income = float(data.get("income", 0))
-        rent = float(data.get("rent", 0))
-        food = float(data.get("food", 0))
-        travel = float(data.get("travel", 0))
+        income = float(data.get("income"))
+        rent = float(data.get("rent"))
+        food = float(data.get("food"))
+        travel = float(data.get("travel"))
 
         if income <= 0:
             return jsonify({"error": "Income must be greater than 0"}), 400
@@ -88,11 +125,7 @@ def full_analysis():
         # ======================
         # ML Prediction
         # ======================
-        if model is None:
-            return jsonify({"error": "Model not loaded"}), 500
-
-        features = [[income, rent, food, travel]]
-
+        features = np.array([[income, rent, food, travel]])
         pred = model.predict(features)[0]
 
         behavior = get_behavior_label(pred)
@@ -108,8 +141,8 @@ def full_analysis():
         goal_result = goal_planner(
             data.get("goal_type"),
             data.get("category"),
-            data.get("price"),
-            data.get("months", 12)
+            float(data.get("price", 0)),
+            int(data.get("months", 12))
         )
 
         # ======================
@@ -124,7 +157,7 @@ def full_analysis():
         })
 
     except Exception as e:
-        print("❌ Error:", str(e))
+        print("❌ Full Analysis Error:", str(e))
         return jsonify({"error": "Internal server error"}), 500
 
 
