@@ -100,6 +100,7 @@ export default function Navbar() {
                 <div className="bg-brand-dark/95 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden shadow-xl py-1">
                   <button onClick={() => changeLanguage('en')} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">English (EN)</button>
                   <button onClick={() => changeLanguage('hi')} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">Hindi (HI)</button>
+                  <button onClick={() => changeLanguage('te')} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">Telugu (TE)</button>
                   <button onClick={() => changeLanguage('es')} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">Spanish (ES)</button>
                   <button onClick={() => changeLanguage('fr')} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">French (FR)</button>
                 </div>

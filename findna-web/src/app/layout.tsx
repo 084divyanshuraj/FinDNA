@@ -39,7 +39,7 @@ export default function RootLayout({
             function googleTranslateElementInit() {
               new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: 'en,hi,es,fr,de,zh-CN',
+                IncludedLanguages: 'en,hi,es,fr,de,zh-CN,te',
                 autoDisplay: false
               }, 'google_translate_element');
             }
