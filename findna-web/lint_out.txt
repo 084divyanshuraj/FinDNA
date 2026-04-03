@@ -1,0 +1,93 @@
+
+C:\ALL_Language_program\FinDNA\findna-web\src\app\forgot-password\page.tsx
+  29:48  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\ALL_Language_program\FinDNA\findna-web\src\app\login\page.tsx
+  97:18  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\ALL_Language_program\FinDNA\findna-web\src\app\signup\page.tsx
+   6:62  warning  'Info' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  20:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\ALL_Language_program\FinDNA\findna-web\src\app\signup\page.tsx:20:5
+  18 |     if (password.match(/[0-9]/)) score += 25;
+  19 |     if (password.match(/[^A-Za-z0-9]/)) score += 25;
+> 20 |     setStrength(score);
+     |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  21 |   }, [password]);
+  22 |
+  23 |   return (  react-hooks/set-state-in-effect
+
+C:\ALL_Language_program\FinDNA\findna-web\src\components\home\AnalysisSection.tsx
+  33:17  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\ALL_Language_program\FinDNA\findna-web\src\components\layout\AnimatedBackground.tsx
+  55:26  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\ALL_Language_program\FinDNA\findna-web\src\components\layout\AnimatedBackground.tsx:55:26
+  53 |           className="absolute text-brand-teal/10 font-bold font-mono select-none"
+  54 |           style={{
+> 55 |             fontSize: `${Math.random() * 40 + 20}px`,
+     |                          ^^^^^^^^^^^^^ Cannot call impure function
+  56 |             left: `${Math.random() * 100}vw`,
+  57 |             top: `${Math.random() * 100}vh`,
+  58 |           }}  react-hooks/purity
+  56:22  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\ALL_Language_program\FinDNA\findna-web\src\components\layout\AnimatedBackground.tsx:56:22
+  54 |           style={{
+  55 |             fontSize: `${Math.random() * 40 + 20}px`,
+> 56 |             left: `${Math.random() * 100}vw`,
+     |                      ^^^^^^^^^^^^^ Cannot call impure function
+  57 |             top: `${Math.random() * 100}vh`,
+  58 |           }}
+  59 |           animate={{                                                                   react-hooks/purity
+  57:21  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\ALL_Language_program\FinDNA\findna-web\src\components\layout\AnimatedBackground.tsx:57:21
+  55 |             fontSize: `${Math.random() * 40 + 20}px`,
+  56 |             left: `${Math.random() * 100}vw`,
+> 57 |             top: `${Math.random() * 100}vh`,
+     |                     ^^^^^^^^^^^^^ Cannot call impure function
+  58 |           }}
+  59 |           animate={{
+  60 |             y: ['0vh', '-100vh'],                                                     react-hooks/purity
+  65:23  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\ALL_Language_program\FinDNA\findna-web\src\components\layout\AnimatedBackground.tsx:65:23
+  63 |           }}
+  64 |           transition={{
+> 65 |             duration: Math.random() * 20 + 20,
+     |                       ^^^^^^^^^^^^^ Cannot call impure function
+  66 |             repeat: Infinity,
+  67 |             ease: "linear",
+  68 |             delay: Math.random() * 20,                                                                                   react-hooks/purity
+  68:20  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\ALL_Language_program\FinDNA\findna-web\src\components\layout\AnimatedBackground.tsx:68:20
+  66 |             repeat: Infinity,
+  67 |             ease: "linear",
+> 68 |             delay: Math.random() * 20,
+     |                    ^^^^^^^^^^^^^ Cannot call impure function
+  69 |           }}
+  70 |         >
+  71 |           Γé╣                                                                                                                                       react-hooks/purity
+
+Γ£û 10 problems (9 errors, 1 warning)
+
