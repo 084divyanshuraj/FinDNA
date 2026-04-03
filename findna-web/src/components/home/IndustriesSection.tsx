@@ -29,7 +29,8 @@ export default function IndustriesSection() {
   ];
 
   return (
-    <section className="py-24 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-y border-white/5 bg-brand-dark/30 backdrop-blur-sm">
+    <section className="py-24 relative z-10 border-y border-white/5 bg-brand-dark/30 backdrop-blur-sm">
+      <div className="w-[90%] max-w-[1800px] mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-center mb-16 px-4">
         <div className="max-w-xl text-center md:text-left">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -65,6 +66,7 @@ export default function IndustriesSection() {
             </div>
           </motion.div>
         ))}
+      </div>
       </div>
     </section>
   );

@@ -21,18 +21,13 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-32 overflow-hidden">
-      <div className="z-10 text-center max-w-4xl mx-auto">
+    <section className="relative min-h-[95vh] flex flex-col items-center justify-center px-4 pt-20 pb-32 overflow-hidden">
+      <div className="z-10 text-center w-[90%] max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-3 border-brand-teal/30">
-            <span className="flex h-2 w-2 rounded-full bg-brand-teal animate-pulse"></span>
-            <span className="text-sm font-medium text-brand-teal">FinDNA AI Engine 2.0 is Live</span>
-          </div>
-
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
             Understand Your <br className="hidden md:block" />
             <span className="relative inline-block w-full h-[1.3em] mt-2">

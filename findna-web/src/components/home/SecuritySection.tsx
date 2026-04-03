@@ -6,7 +6,7 @@ import { ShieldCheck, Lock, EyeOff } from 'lucide-react';
 
 export default function SecuritySection() {
   return (
-    <section className="py-24 relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 relative z-10 w-[90%] max-w-[1800px] mx-auto">
       <div className="glass-card rounded-[2.5rem] border border-brand-teal/20 p-8 md:p-16 overflow-hidden relative">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-teal/10 via-transparent to-brand-purple/10 pointer-events-none"></div>
         

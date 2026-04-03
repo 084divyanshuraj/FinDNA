@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [industriesOpen, setIndustriesOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,70 +23,24 @@ export default function Navbar() {
     window.location.reload();
   };
 
-  const industries = [
-    { name: 'Education', href: '#' },
-    { name: 'Stock Market', href: '#' },
-    { name: 'Companies', href: '#' },
-    { name: 'Personal Finance', href: '#' },
-    { name: 'Business', href: '#' },
-  ];
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-2 md:py-3">
+      <div className="w-[90%] max-w-[1800px] mx-auto">
+        <div className="flex justify-between items-center py-4 md:py-6">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             <img 
               src="/logo.png" 
               alt="FinDNA Logo" 
-              className="h-10 md:h-12 w-auto object-contain scale-[1.15] md:scale-[1.3] origin-left transform group-hover:scale-[1.2] md:group-hover:scale-[1.35] group-active:scale-[1.25] md:group-active:scale-[1.45] transition-transform duration-200 drop-shadow-[0_0_8px_rgba(76,201,240,0.5)] relative z-10" 
+              className="h-12 md:h-16 w-auto object-contain scale-[1.15] md:scale-[1.3] origin-left transform group-hover:scale-[1.2] md:group-hover:scale-[1.35] group-active:scale-[1.25] md:group-active:scale-[1.45] transition-transform duration-200 drop-shadow-[0_0_8px_rgba(76,201,240,0.5)] relative z-10" 
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/about" className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group">
-              About
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-teal transition-all group-hover:w-full"></span>
+          <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <Link href="/login" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+              Sign In
             </Link>
-            
-            {/* Dropdown */}
-            <div className="relative group">
-              <button 
-                className="flex items-center gap-1 text-sm font-medium text-gray-300 hover:text-white transition-colors py-2"
-                onMouseEnter={() => setIndustriesOpen(true)}
-                onMouseLeave={() => setIndustriesOpen(false)}
-              >
-                Industries <ChevronDown size={14} className={`transition-transform ${industriesOpen ? 'rotate-180 text-brand-teal' : ''}`} />
-              </button>
-              
-              <AnimatePresence>
-                {industriesOpen && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 mt-0 w-48 rounded-xl glass-card border border-white/10 overflow-hidden"
-                    onMouseEnter={() => setIndustriesOpen(true)}
-                    onMouseLeave={() => setIndustriesOpen(false)}
-                  >
-                    <div className="py-2">
-                      {industries.map((item) => (
-                        <Link 
-                          key={item.name} 
-                          href={item.href}
-                          className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
 
             {/* Language Dropdown */}
             <div className="relative group/lang">
@@ -107,17 +60,17 @@ export default function Navbar() {
               </div>
             </div>
 
-            <div className="flex items-center space-x-4 ml-4">
-              <Link href="/login" className="text-sm font-medium text-gray-300 hover:text-white transition-colors px-3 py-2">
-                Sign In
-              </Link>
-              <Link href="/signup" className="relative group overflow-hidden rounded-full p-[1px]">
-                <span className="absolute inset-0 bg-gradient-to-r from-brand-teal to-brand-purple rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-300"></span>
-                <div className="relative bg-brand-dark px-5 py-2 rounded-full transition-all duration-300 group-hover:bg-opacity-0">
-                  <span className="relative z-10 text-sm font-medium text-white group-hover:text-brand-dark">Sign Up</span>
-                </div>
-              </Link>
-            </div>
+            <Link href="/about" className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group">
+              About
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-teal transition-all group-hover:w-full"></span>
+            </Link>
+
+            <Link href="/signup" className="relative group overflow-hidden rounded-full p-[1px] ml-2">
+              <span className="absolute inset-0 bg-gradient-to-r from-brand-teal to-brand-purple rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-300"></span>
+              <div className="relative bg-brand-dark px-5 py-2 rounded-full transition-all duration-300 group-hover:bg-opacity-0">
+                <span className="relative z-10 text-sm font-medium text-white">Sign Up</span>
+              </div>
+            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -140,29 +93,17 @@ export default function Navbar() {
             className="md:hidden bg-brand-dark/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-4 flex flex-col">
-              <Link href="/about" className="text-base font-medium text-gray-300 hover:text-white p-2">
-                About
+              <Link href="/login" className="w-full text-center py-3 rounded-xl border border-white/10 text-gray-300 font-medium hover:bg-white/5 hover:text-white transition-colors">
+                Sign In
               </Link>
               
-              <div className="space-y-2">
-                <div className="text-base font-medium text-gray-400 p-2">Industries</div>
-                <div className="pl-4 space-y-2 flex flex-col border-l border-white/10 ml-2">
-                  {industries.map((item) => (
-                    <Link key={item.name} href={item.href} className="text-sm text-gray-300 hover:text-white py-1">
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="pt-4 flex flex-col gap-3">
-                <Link href="/login" className="w-full text-center py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-colors">
-                  Sign In
-                </Link>
-                <Link href="/signup" className="w-full text-center py-3 rounded-xl bg-gradient-to-r from-brand-teal to-brand-purple text-white font-medium hover:opacity-90 transition-opacity">
-                  Sign Up
-                </Link>
-              </div>
+              <Link href="/about" className="text-base text-center font-medium text-gray-300 hover:text-white p-2">
+                About
+              </Link>
+
+              <Link href="/signup" className="w-full text-center py-3 rounded-xl bg-gradient-to-r from-brand-teal to-brand-purple text-white font-medium hover:opacity-90 transition-opacity">
+                Sign Up
+              </Link>
             </div>
           </motion.div>
         )}

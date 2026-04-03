@@ -41,7 +41,7 @@ export default function SignupPage() {
       });
       if (error) throw error;
       alert("Account created successfully!");
-      router.push('/login');
+      router.push('/dashboard');
     } catch (err: any) {
       setErrorMsg(err.message || "An error occurred");
     } finally {

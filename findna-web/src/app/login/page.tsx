@@ -26,7 +26,7 @@ export default function LoginPage() {
       });
       if (error) throw error;
       alert("Login successful!");
-      router.push('/');
+      router.push('/dashboard');
     } catch (err: any) {
       setErrorMsg(err.message || 'Invalid login credentials');
     } finally {
