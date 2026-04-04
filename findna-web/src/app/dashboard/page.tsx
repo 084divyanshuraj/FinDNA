@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Lightbulb, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Lightbulb, CheckCircle2, AlertTriangle, ArrowRight, Target, TrendingUp as TrendingUpIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { addTransaction } from '@/app/actions/transactions';
+import { getGoals } from '@/app/actions/goals';
 
 export default function DashboardOverview() {
   const [tab, setTab] = useState<'income'|'expense'>('expense');
@@ -12,6 +13,7 @@ export default function DashboardOverview() {
   // ML State
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [goals, setGoals] = useState<any[]>([]);
 
   // Quick Add State
   const [txAmount, setTxAmount] = useState<number | string>("");
@@ -30,6 +32,17 @@ export default function DashboardOverview() {
     months: 24
   });
 
+  useEffect(() => {
+    async function loadData() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const goalRes = await getGoals(user.id);
+        if (goalRes.success) setGoals(goalRes.goals?.slice(0, 2) || []);
+      }
+    }
+    loadData();
+  }, []);
+
   const handleChange = (e: any) => {
     setFormData({
       ...formData,
@@ -40,38 +53,43 @@ export default function DashboardOverview() {
   const generateInsights = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setResult(null); // Clear previous results
     
     try {
+      // Use a timeout to avoid long waits for cold starts
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), 15000);
+
       const res = await fetch("https://findna.onrender.com/full_analysis", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(formData),
+        signal: controller.signal
       });
 
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.warn("Backend responded with error:", errorData);
-        // Don't throw, just use fallback
-        setResult({
-          financial_behavior: formData.rent > formData.income * 0.4 ? "Overspender" : "Balanced",
-          score: formData.rent > formData.income * 0.4 ? 45 : 85,
-          future_price: formData.price * 1.12,
-          monthly_saving: (formData.price * 1.12) / formData.months,
-          tip: "Note: AI logic error (using local fallback). Check your inputs!"
-        });
-      } else {
+      clearTimeout(id);
+
+      if (res.ok) {
         const data = await res.json();
         setResult(data);
+      } else {
+        throw new Error("API_ERROR");
       }
-    } catch (err) {
-      console.error("ML Backend error:", err);
-      // Fallback logic for stable UI even if backend is down
+    } catch (err: any) {
+      // Silently handle to avoid dev-mode overlay
+      const isTimeout = err.name === 'AbortError';
+      
       setResult({
         financial_behavior: formData.rent > formData.income * 0.4 ? "Overspender" : "Balanced",
         score: formData.rent > formData.income * 0.4 ? 45 : 85,
         future_price: formData.price * 1.12,
         monthly_saving: (formData.price * 1.12) / formData.months,
-        tip: "Note: API offline (using local estimates). Your spending looks balanced"
+        tip: isTimeout 
+          ? "Note: Render server is waking up (spinning up). Using local estimates..."
+          : "Note: Connection issue (CORS or Offline). Using local estimates..."
       });
     }
     setLoading(false);
@@ -114,9 +132,9 @@ export default function DashboardOverview() {
       transition={{ duration: 0.4 }}
       className="w-full flex-1"
     >
-      <div className="mb-6 space-y-4">
-        {/* Top Banner Row */}
-        <div className="bg-white/5 border border-white/10 glass-card rounded-2xl p-5 shadow-sm flex items-center justify-between">
+      <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Safe to Spend */}
+        <div className="bg-white/5 border border-white/10 glass-card rounded-2xl p-5 shadow-sm flex items-center justify-between col-span-1 md:col-span-2">
            <div>
              <span className="text-white font-medium text-sm">Safe to Spend (70% buffer)</span>
              <p className="text-gray-400 text-xs mt-1">Keep 30% as emergency buffer</p>
@@ -124,21 +142,47 @@ export default function DashboardOverview() {
            <div className="text-xl font-bold text-brand-teal">₹{Math.round((formData.income - formData.rent - formData.food - formData.travel) * 0.7).toLocaleString()}</div>
         </div>
 
-        {/* Success Banner */}
+        {/* DNA Status */}
         <div className={`border rounded-2xl p-4 shadow-sm flex items-center gap-3 glass-card ${result?.score < 50 ? 'bg-rose-500/10 border-rose-500/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
            <div className={`p-2 rounded-full ${result?.score < 50 ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
-             {result?.score < 50 ? <AlertTriangle size={24} /> : <CheckCircle2 size={24} />}
+             {result?.score < 50 ? <AlertTriangle size={20} /> : <CheckCircle2 size={20} />}
            </div>
-           <div>
-              <h3 className={`font-bold text-sm flex items-center gap-1 ${result?.score < 50 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                {result?.score < 50 ? 'Warning!' : 'All Good! 🎉'}
+           <div className="overflow-hidden">
+              <h3 className={`font-bold text-xs ${result?.score < 50 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                {result?.score < 50 ? 'Warning!' : 'DNA: Healthy'}
               </h3>
-              <p className={`text-xs font-medium ${result?.score < 50 ? 'text-rose-300' : 'text-emerald-300'}`}>
-                {result ? result.tip : "You're managing your money well. Keep it up!"}
+              <p className="text-[10px] text-gray-400 truncate">
+                {result ? result.tip : "Manage your DNA score"}
               </p>
            </div>
         </div>
       </div>
+
+      {/* Goal Summary Row (New Integrated Element) */}
+      {goals.length > 0 && (
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+           {goals.map((goal: any) => (
+             <div key={goal.id} className="bg-white/5 border border-white/10 glass-card rounded-2xl p-4 flex items-center gap-4 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-teal/5 rounded-full blur-[30px]" />
+                <div className="p-3 rounded-xl bg-brand-teal/10 border border-brand-teal/20 text-brand-teal">
+                  <Target size={20} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-end mb-1">
+                    <h4 className="text-white text-xs font-bold truncate">{goal.name}</h4>
+                    <span className="text-brand-teal text-[10px] font-bold">{Math.round((goal.savedAmount / goal.targetAmount) * 100)}%</span>
+                  </div>
+                  <div className="w-full bg-black/40 h-1 rounded-full overflow-hidden">
+                    <div className="bg-brand-teal h-full transition-all duration-1000" style={{ width: `${(goal.savedAmount / goal.targetAmount) * 100}%` }}></div>
+                  </div>
+                </div>
+                <button className="p-2 text-gray-500 hover:text-white transition-colors">
+                  <ArrowRight size={16} />
+                </button>
+             </div>
+           ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
          {/* Quick Add Transaction */}
