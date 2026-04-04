@@ -84,7 +84,23 @@ def get_expense_tip(data):
         return "Your spending looks balanced 👍"
 
 
-# 🔥 NEW: AFFORDABILITY FUNCTION
+# 🔥 NEW: FUTURE PRICE ADJUSTMENT
+def adjust_future_price(price, months, goal_type):
+    years = months / 12
+
+    inflation_rate = 0.07      # for land/property
+    depreciation_rate = 0.10   # for car/bike
+
+    if goal_type == "increasing":
+        return round(price * ((1 + inflation_rate) ** years), 2)
+
+    elif goal_type == "decreasing":
+        return round(price * ((1 - depreciation_rate) ** years), 2)
+
+    return price
+
+
+# 🔥 AFFORDABILITY FUNCTION
 def check_affordability(data, monthly_saving):
     income = data.get("income", 0)
 
@@ -188,20 +204,23 @@ def full_analysis():
         # ======================
         score = calculate_score(data)
         score_label = get_score_label(score)
-
         tip = get_expense_tip(data)
 
-        print("📥 Input:", data)
-        print("🤖 Prediction:", behavior)
+        # ======================
+        # 🔥 GOAL LOGIC (UPDATED)
+        # ======================
+        price = float(data.get("price", 0))
+        months = int(data.get("months", 12))
+        goal_type = data.get("goal_type")
 
-        # ======================
-        # Goal Planning
-        # ======================
+        # adjust price dynamically
+        future_price = adjust_future_price(price, months, goal_type)
+
         goal_result = goal_planner(
-            data.get("goal_type"),
+            goal_type,
             data.get("category"),
-            float(data.get("price", 0)),
-            int(data.get("months", 12))
+            future_price,
+            months
         )
 
         monthly_saving = goal_result.get("monthly_saving", 0)
@@ -221,7 +240,7 @@ def full_analysis():
             "financial_behavior": behavior,
             "score": score,
             "score_label": score_label,
-            "future_price": goal_result.get("future_price"),
+            "future_price": future_price,
             "monthly_saving": monthly_saving,
             "affordable": affordable,
             "affordability_message": affordability_msg,
