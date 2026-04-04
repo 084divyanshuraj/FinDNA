@@ -4,13 +4,25 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
+  url       = "postgresql://postgres.flnjvwbowgiotckjgzlx:Rajesh428Sarraf@db.flnjvwbowgiotckjgzlx.supabase.co:5432/postgres"
 }
 
 model User {
-  id         String   @id @default(uuid())
-  name       String?
-  email      String   @unique
-  password   String
-  profession String?
-  createdAt  DateTime @default(now())
+  id           String        @id @default(uuid())
+  name         String?
+  email        String        @unique
+  password     String
+  profession   String?
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String   // "income" or "expense"
+  amount    Float
+  category  String?  // nullable for income
+  createdAt DateTime @default(now())
 }

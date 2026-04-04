@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lightbulb, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { addTransaction } from '@/app/actions/transactions';
 
 export default function DashboardOverview() {
   const [tab, setTab] = useState<'income'|'expense'>('expense');
@@ -10,6 +12,11 @@ export default function DashboardOverview() {
   // ML State
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+
+  // Quick Add State
+  const [txAmount, setTxAmount] = useState<number | string>("");
+  const [txCategory, setTxCategory] = useState("Rent");
+  const [addingTx, setAddingTx] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -35,7 +42,7 @@ export default function DashboardOverview() {
     setLoading(true);
     
     try {
-      const res = await fetch("http://127.0.0.1:5000/full_analysis", {
+      const res = await fetch("http://localhost:5000/full_analysis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
@@ -57,6 +64,36 @@ export default function DashboardOverview() {
       return;
     }
     setLoading(false);
+  };
+  const handleAddTransaction = async () => {
+    if (!txAmount || Number(txAmount) <= 0) return alert("Please enter a valid amount");
+    
+    setAddingTx(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
+      // For income, category is usually null or "Income"
+      const result = await addTransaction({
+        type: tab,
+        amount: Number(txAmount),
+        category: tab === 'expense' ? txCategory : 'Income',
+        userId: user.id,
+        userEmail: user.email // Pass email for profile sync
+      });
+
+      if (result.success) {
+        alert(`${tab === 'income' ? 'Income' : 'Expense'} added successfully!`);
+        setTxAmount("");
+      } else {
+        alert("Failed to add transaction");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    } finally {
+      setAddingTx(false);
+    }
   };
 
   return (
@@ -113,14 +150,25 @@ export default function DashboardOverview() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
+             <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
                <div>
                  <label className="block text-xs text-gray-400 font-medium mb-1.5">Amount (₹)</label>
-                 <input type="number" placeholder="0" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-brand-teal focus:border-transparent placeholder-gray-600" />
+                 <input 
+                  type="number" 
+                  placeholder="0" 
+                  value={txAmount}
+                  onChange={(e) => setTxAmount(e.target.value)}
+                  className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-brand-teal focus:border-transparent placeholder-gray-600" 
+                 />
                </div>
                <div>
-                 <label className="block text-xs text-gray-400 font-medium mb-1.5">Category</label>
-                 <select className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-brand-teal appearance-none">
+                 <label className={`block text-xs font-medium mb-1.5 ${tab === 'income' ? 'text-gray-600' : 'text-gray-400'}`}>Category</label>
+                 <select 
+                  value={txCategory}
+                  onChange={(e) => setTxCategory(e.target.value)}
+                  disabled={tab === 'income'}
+                  className={`w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-brand-teal appearance-none ${tab === 'income' ? 'opacity-30 cursor-not-allowed' : ''}`}
+                 >
                     <option className="bg-[#0b101e]">Rent</option>
                     <option className="bg-[#0b101e]">Food</option>
                     <option className="bg-[#0b101e]">Transport</option>
@@ -130,8 +178,12 @@ export default function DashboardOverview() {
                </div>
             </div>
 
-            <button className={`w-full py-3 rounded-xl text-white font-medium text-sm transition-opacity hover:opacity-90 relative z-10 ${tab === 'expense' ? 'bg-rose-600' : 'bg-brand-teal text-brand-dark font-bold'}`}>
-              Add {tab === 'income' ? 'Income' : 'Expense'}
+            <button 
+              onClick={handleAddTransaction}
+              disabled={addingTx}
+              className={`w-full py-3 rounded-xl text-white font-medium text-sm transition-all hover:opacity-90 active:scale-[0.98] relative z-10 ${tab === 'expense' ? 'bg-rose-600' : 'bg-brand-teal text-brand-dark font-bold'} ${addingTx ? 'opacity-50 cursor-wait' : ''}`}
+            >
+              {addingTx ? 'Saving...' : `Add ${tab === 'income' ? 'Income' : 'Expense'}`}
             </button>
          </div>
 
