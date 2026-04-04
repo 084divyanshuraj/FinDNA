@@ -24,8 +24,8 @@ export default function DashboardOverview() {
     rent: 8000,
     food: 4000,
     travel: 2000,
-    goal_type: "car",
-    category: "luxury",
+    goal_type: "buy", // Fixed: must be "buy" or "save" for ML backend
+    category: "car", // Using a valid category from backend
     price: 300000,
     months: 24
   });
@@ -42,26 +42,37 @@ export default function DashboardOverview() {
     setLoading(true);
     
     try {
-      const res = await fetch("http://localhost:5000/full_analysis", {
+      const res = await fetch("https://findna.onrender.com/full_analysis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
-      const data = await res.json();
-      setResult(data);
-    } catch (err) {
-      console.error("ML Backend error:", err);
-      setTimeout(() => {
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        console.warn("Backend responded with error:", errorData);
+        // Don't throw, just use fallback
         setResult({
           financial_behavior: formData.rent > formData.income * 0.4 ? "Overspender" : "Balanced",
           score: formData.rent > formData.income * 0.4 ? 45 : 85,
           future_price: formData.price * 1.12,
           monthly_saving: (formData.price * 1.12) / formData.months,
-          tip: formData.food > formData.income * 0.3 ? "You are spending too much on food" : "Your spending looks balanced"
+          tip: "Note: AI logic error (using local fallback). Check your inputs!"
         });
-        setLoading(false);
-      }, 1500);
-      return;
+      } else {
+        const data = await res.json();
+        setResult(data);
+      }
+    } catch (err) {
+      console.error("ML Backend error:", err);
+      // Fallback logic for stable UI even if backend is down
+      setResult({
+        financial_behavior: formData.rent > formData.income * 0.4 ? "Overspender" : "Balanced",
+        score: formData.rent > formData.income * 0.4 ? 45 : 85,
+        future_price: formData.price * 1.12,
+        monthly_saving: (formData.price * 1.12) / formData.months,
+        tip: "Note: API offline (using local estimates). Your spending looks balanced"
+      });
     }
     setLoading(false);
   };
