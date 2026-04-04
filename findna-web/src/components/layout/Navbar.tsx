@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X, ChevronDown, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -22,6 +24,8 @@ export default function Navbar() {
     document.cookie = `googtrans=/en/${langCode}; path=/;`;
     window.location.reload();
   };
+
+  if (pathname?.startsWith('/dashboard')) return null;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">

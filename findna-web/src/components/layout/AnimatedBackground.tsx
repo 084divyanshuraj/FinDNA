@@ -10,9 +10,9 @@ export default function AnimatedBackground() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setElements([...Array(15)].map(() => ({
+    setElements([...Array(45)].map(() => ({
       icon: floatingIcons[Math.floor(Math.random() * floatingIcons.length)],
-      fontSize: `${Math.random() * 35 + 25}px`,
+      fontSize: `${Math.random() * 30 + 15}px`,
       left: `${Math.random() * 100}vw`,
       top: `${Math.random() * 100}vh`,
       duration: Math.random() * 15 + 15,

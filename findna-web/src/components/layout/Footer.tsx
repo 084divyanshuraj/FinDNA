@@ -1,7 +1,14 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/dashboard')) return null;
+
   return (
     <footer className="border-t border-white/5 bg-brand-dark/50 backdrop-blur-md mt-auto">
       <div className="w-[90%] max-w-[1800px] mx-auto py-16">
