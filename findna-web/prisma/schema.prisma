@@ -15,6 +15,7 @@ model User {
   profession   String?
   createdAt    DateTime      @default(now())
   transactions Transaction[]
+  goals        Goal[]
 }
 
 model Transaction {
@@ -25,4 +26,17 @@ model Transaction {
   amount    Float
   category  String?  // nullable for income
   createdAt DateTime @default(now())
+}
+
+model Goal {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  name         String   // e.g. "My Car"
+  type         String   // "buy" or "save"
+  category     String?  // "car", "bike", "gold", "electronics"
+  targetAmount Float
+  months       Int
+  savedAmount  Float    @default(0)
+  createdAt    DateTime @default(now())
 }
