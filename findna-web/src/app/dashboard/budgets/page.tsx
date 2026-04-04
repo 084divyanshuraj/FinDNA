@@ -129,103 +129,6 @@ export default function SmartBudgetManager() {
 
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-<<<<<<< HEAD
-        
-        {/* Left Column: Line Chart equivalent / Budget Controls */}
-        <motion.div variants={itemVariants} className="lg:col-span-8 bg-[#131c2e]/90 border border-white/[0.03] rounded-3xl p-8 relative overflow-hidden shadow-xl">
-           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px] pointer-events-none" />
-           <div className="flex justify-between items-center mb-8 relative z-10">
-             <div>
-               <h2 className="text-lg font-bold text-white tracking-wide">Budget Allocator</h2>
-               <p className="text-xs text-gray-500 font-medium mt-1">Adjust sliders to shape your financial DNA</p>
-             </div>
-             <div className="bg-emerald-500/10 px-4 py-1.5 rounded-full border border-emerald-500/20">
-               <span className="text-xs font-bold text-emerald-400 uppercase flex items-center gap-1">
-                 <ArrowUpRight size={14}/> Dynamic Tuning
-               </span>
-             </div>
-           </div>
-
-           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6 relative z-10 mt-6">
-              <BudgetSlider label="Housing/Rent" value={rent} setter={setRent} color="#38bdf8" icon={Home} />
-              <BudgetSlider label="Food & Dining" value={food} setter={setFood} color="#4ade80" icon={Utensils} />
-              <BudgetSlider label="Travel/Commute" value={travel} setter={setTravel} color="#c084fc" icon={Plane} />
-              <BudgetSlider label="Lifestyle/Misc" value={lifestyle} setter={setLifestyle} color="#fb923c" icon={DollarSign} />
-              <BudgetSlider label="Investments" value={investments} setter={setInvestments} color="#10b981" icon={TrendingUp} />
-           </div>
-
-           {/* Remaining Alert Bar */}
-           <div className="mt-10 pt-8 border-t border-white/[0.05] relative z-10 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Unallocated Cash</p>
-                <p className={`text-xl font-bold ${remaining < 0 ? 'text-rose-500' : 'text-white'}`}>
-                  ${remaining.toLocaleString()}
-                </p>
-              </div>
-              <button 
-                className={`px-8 py-3 rounded-xl text-sm font-bold shadow-lg transition-all ${remaining < 0 ? 'bg-rose-500 text-white cursor-not-allowed opacity-50' : 'bg-white text-black hover:bg-gray-200 hover:shadow-white/20'}`}
-                disabled={remaining < 0}
-              >
-                Apply Allocations
-              </button>
-           </div>
-        </motion.div>
-
-        {/* Right Column: Asset Allocation Pie Chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-4 bg-[#131c2e]/90 border border-white/[0.03] rounded-3xl p-8 shadow-xl flex flex-col justify-between relative">
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-transparent to-[#0a0f18]/50 pointer-events-none rounded-3xl" />
-          
-          <div className="relative z-10">
-            <h2 className="text-lg font-bold text-white tracking-wide">Expense Allocation</h2>
-            <p className="text-xs text-gray-500 font-medium mt-1">Total Expected Outflow</p>
-          </div>
-
-          <div className="flex-1 min-h-[250px] relative z-10 flex items-center justify-center my-4">
-             {/* Center Label for Donut */}
-             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-               <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest mb-1">Outflow</span>
-               <span className="text-2xl font-bold text-white">${totalExpense.toLocaleString()}</span>
-             </div>
-             
-             <ResponsiveContainer width="100%" height={280}>
-               <PieChart>
-                 <Pie
-                   data={data}
-                   cx="50%"
-                   cy="50%"
-                   innerRadius={85}
-                   outerRadius={115}
-                   paddingAngle={2}
-                   dataKey="value"
-                   stroke="none"
-                   cornerRadius={4}
-                 >
-                   {data.map((entry, index) => (
-                     <Cell key={`cell-${index}`} fill={entry.color} />
-                   ))}
-                 </Pie>
-                 <RechartsTooltip 
-                   formatter={(value: any) => [`₹${value?.toLocaleString() ?? 0}`, 'Amount']}
-                   contentStyle={{ backgroundColor: '#131c2e', borderColor: '#ffffff10', borderRadius: '12px', color: '#fff', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
-                   itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                 />
-               </PieChart>
-             </ResponsiveContainer>
-          </div>
-
-          {/* Allocation Legends */}
-          <div className="space-y-3 relative z-10">
-            {data.map((item, i) => (
-               <div key={i} className="flex items-center justify-between group">
-                 <div className="flex items-center gap-3">
-                   <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: item.color, boxShadow: `0 0 10px ${item.color}40` }}></div>
-                   <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">{item.name}</span>
-                 </div>
-                 <div className="flex items-center gap-3">
-                   <span className="text-xs text-gray-500">${item.value.toLocaleString()}</span>
-                   <span className="text-sm font-bold text-white w-10 text-right">{Math.round((item.value / income) * 100) || 0}%</span>
-                 </div>
-=======
         <div className="lg:col-span-7 space-y-6">
           <div className="bg-white/5 border border-white/10 glass-card rounded-2xl p-8 relative overflow-hidden shadow-sm">
              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-teal/5 rounded-full blur-[80px] pointer-events-none" />
@@ -233,7 +136,6 @@ export default function SmartBudgetManager() {
                <div>
                  <h2 className="text-lg font-bold text-white">Dynamic Asset Allocator</h2>
                  <p className="text-xs text-gray-500 font-medium mt-1 uppercase tracking-widest">Adjust to reshape DNA</p>
->>>>>>> 54345e80f9464ed8838ccd524216e24619a2c91c
                </div>
                <div className="p-2 bg-brand-teal/10 rounded-xl border border-brand-teal/20">
                  <Target size={20} className="text-brand-teal" />
@@ -298,7 +200,7 @@ export default function SmartBudgetManager() {
                      ))}
                    </Pie>
                    <RechartsTooltip 
-                     formatter={(value: number) => [`₹${value.toLocaleString()}`, '']}
+                     formatter={(value: any) => [`₹${value?.toLocaleString() ?? 0}`, 'Amount']}
                      contentStyle={{ backgroundColor: '#0b101e', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }}
                    />
                  </PieChart>
