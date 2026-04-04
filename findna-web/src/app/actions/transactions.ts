@@ -42,3 +42,20 @@ export async function addTransaction(data: {
     return { success: false, error: 'Failed to add transaction' }
   }
 }
+
+export async function getTransactions(userId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Transaction')
+      .select('*')
+      .eq('userId', userId)
+      .order('createdAt', { ascending: false });
+
+    if (error) throw error;
+    return { success: true, transactions: data }
+  } catch (error) {
+    console.error('Error fetching transactions:', error)
+    return { success: false, error: 'Failed to fetch transactions' }
+  }
+}
+
