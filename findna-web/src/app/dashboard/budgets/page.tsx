@@ -236,7 +236,7 @@ export default function SmartBudgetManager() {
                    ))}
                  </Pie>
                  <RechartsTooltip 
-                   formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
+                   formatter={(value: any) => [`₹${value?.toLocaleString() ?? 0}`, 'Amount']}
                    contentStyle={{ backgroundColor: '#131c2e', borderColor: '#ffffff10', borderRadius: '12px', color: '#fff', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
                    itemStyle={{ color: '#fff', fontWeight: 'bold' }}
                  />
