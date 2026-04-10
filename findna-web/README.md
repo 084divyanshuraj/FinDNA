@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FinDNA - Personal Finance & Budget Manager
 
-## Getting Started
+FinDNA is a modern, full-stack personal finance application designed to help you track your transactions, manage income and expenses, and set financial goals. Built with cutting-edge web technologies, it offers a seamless, interactive, and beautiful user experience.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **User Authentication**: Secure signup and login functionality.
+- **Interactive Dashboard**: A comprehensive overview of your financial health with dynamic charts.
+- **Budget & Transaction Tracking**: Easily add, categorize, and monitor detailed logs of your income and expenses.
+- **Goal Management**: Set custom savings targets for specific purchases (e.g., car, bike, gold, electronics) and track your progress month-by-month.
+- **Responsive Design**: A sleek, modern UI that works flawlessly across all devices.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Library**: [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Database ORM**: [Prisma](https://www.prisma.io/)
+- **Database Engine**: PostgreSQL
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Charts & Visualizations**: [Recharts](https://recharts.org/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Security**: Password hashing using [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js (v18 or higher recommended)
+- A PostgreSQL database (e.g., via Supabase, Neon, or local PostgreSQL instance)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the repository**:
+   ```bash
+   git clone <your-repository-url>
+   cd findna-web
+   ```
 
-## Deploy on Vercel
+2. **Install dependencies**:
+   Using npm:
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Environment Setup**:
+   Create a `.env` file in the root directory and add your database URL connection string:
+   ```env
+   # Example format
+   DATABASE_URL="postgresql://user:password@host:port/database_name?schema=public"
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Initialize Database**:
+   Generate the Prisma client and sync your schema with the database:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Start the Development Server**:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
+
+## 🗄️ Core Database Schema
+
+FinDNA is powered by structured relational data:
+- **`User`**: Securely stores profile and authentication details.
+- **`Transaction`**: Records granular entries for both `income` and `expense` activities.
+- **`Goal`**: Tracks long-term financial targets, accumulated savings, and expected timelines in months.
+
+## 📝 License
+
+This project is licensed under the MIT License.
