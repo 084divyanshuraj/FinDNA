@@ -44,7 +44,7 @@ export default function Footer() {
           <p className="mb-4 xl:mb-0 text-center xl:text-left">
             &copy; {new Date().getFullYear()} FinDNA Technologies, Inc. All rights reserved. 
             <span className="hidden md:inline mx-3">|</span>
-            <span className="block md:inline mt-2 md:mt-0 text-sm md:text-base opacity-80">San Francisco, CA &bull; Global Operations</span>
+            <span className="block md:inline mt-2 md:mt-0 text-sm md:text-base opacity-80">India</span>
           </p>
           <div className="flex space-x-6 mt-2 xl:mt-0">
             <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
