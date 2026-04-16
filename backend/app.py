@@ -31,7 +31,7 @@ def get_behavior_label(pred):
     }.get(pred, "Unknown")
 
 
-# 🔥 SCORING SYSTEM
+#  SCORING SYSTEM
 def calculate_score(data):
     income = data.get("income", 1)
 
@@ -207,7 +207,7 @@ def full_analysis():
         tip = get_expense_tip(data)
 
         # ======================
-        # 🔥 GOAL LOGIC (UPDATED)
+        #  GOAL LOGIC (UPDATED)
         # ======================
         price = float(data.get("price", 0))
         months = int(data.get("months", 12))
