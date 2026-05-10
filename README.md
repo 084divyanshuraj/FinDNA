@@ -99,7 +99,7 @@ The frontend will be available at `http://localhost:3000`
 
 ## 👥 Team
 
-We are a team of four passionate developers from **SVPEC, Vizag** who built FinDNA at the SRUJANA 2026 Hackathon.
+We are a team of four passionate developers from **Vignan University, Guntur** who built FinDNA at the SRUJANA 2026 Hackathon.
 
 | Name | GitHub |
 |------|--------|
@@ -124,6 +124,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 <div align="center">
 
-Made with ❤️ by Team FinDNA · SVPEC Vizag · SRUJANA 2026
+Made with ❤️ by Team FinDNA · Vignan University · SRUJANA 2026
 
 </div>
