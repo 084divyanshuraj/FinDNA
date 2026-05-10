@@ -124,6 +124,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 <div align="center">
 
-Made with ❤️ by Team FinDNA · Vignan University · SRUJANA 2026
+Made with ❤️ by Team Initiate · Vignan University · SRUJANA 2026
 
 </div>
